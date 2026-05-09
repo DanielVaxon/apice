@@ -7,9 +7,14 @@
     --apice-ink: #0e0e0c;
     --apice-bone: #ede6d6;
     --apice-champagne: #c4a572;
+    --apice-champagne-soft: #e5c68a;
     --apice-bronze: #8b6f3f;
     --apice-stone: #3a3833;
     --apice-cream: #f5f0e3;
+    /* Accent aliases — ponteiro semântico para uso técnico (blueprint, mapa). */
+    --apice-accent: var(--apice-champagne);
+    --apice-accent-soft: var(--apice-champagne-soft);
+    --apice-accent-deep: var(--apice-bronze);
   }
 
   html {

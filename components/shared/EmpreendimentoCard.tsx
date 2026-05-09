@@ -1,9 +1,18 @@
+import Image from "next/image";
 import Link from "next/link";
 import { MapPin } from "lucide-react";
-import type { Empreendimento, EmpreendimentoStatus } from "@/lib/empreendimentos";
+import type {
+  Empreendimento,
+  EmpreendimentoStatus,
+} from "@/lib/empreendimentos";
+import { cardSize } from "@/data/unsplash-pool";
+import { blurDataURL } from "@/lib/image-helpers";
 import { cn } from "@/lib/utils";
 
-const statusConfig: Record<EmpreendimentoStatus, { label: string; className: string }> = {
+const statusConfig: Record<
+  EmpreendimentoStatus,
+  { label: string; className: string }
+> = {
   lancamento: {
     label: "Lançamento",
     className: "bg-apice-champagne text-apice-ink",
@@ -35,16 +44,19 @@ export function EmpreendimentoCard({ empreendimento }: EmpreendimentoCardProps) 
       href={`/empreendimentos/${empreendimento.slug}`}
       className="group flex h-full flex-col overflow-hidden border border-apice-stone/40 bg-apice-stone/10 transition-all duration-500 hover:-translate-y-1 hover:border-apice-champagne/60 hover:bg-apice-stone/20"
     >
-      <div
-        className="relative aspect-[16/10] overflow-hidden bg-apice-stone"
-        style={{
-          backgroundImage:
-            "linear-gradient(135deg, rgba(58,56,51,0.95) 0%, rgba(14,14,12,0.85) 100%), radial-gradient(circle at 30% 30%, rgba(196,165,114,0.12) 0%, transparent 60%)",
-        }}
-      >
-        {/* TODO: substituir placeholder por <Image src={empreendimento.imagemHero} fill /> quando imagens estiverem disponíveis */}
-        <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-          style={{ backgroundImage: "linear-gradient(135deg, rgba(196,165,114,0.18) 0%, transparent 70%)" }}
+      <div className="relative aspect-[4/3] overflow-hidden bg-apice-stone">
+        <Image
+          src={cardSize(empreendimento.cardImage)}
+          alt={empreendimento.nome}
+          width={800}
+          height={600}
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+          placeholder="blur"
+          blurDataURL={blurDataURL(800, 600)}
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-apice-ink/60 via-apice-ink/10 to-transparent"
           aria-hidden
         />
         <div className="absolute left-4 top-4 flex flex-wrap items-center gap-2">
@@ -56,7 +68,7 @@ export function EmpreendimentoCard({ empreendimento }: EmpreendimentoCardProps) 
           >
             {status.label}
           </span>
-          <span className="inline-block border border-apice-cream/60 px-3 py-1 font-sans text-[10px] font-medium uppercase tracking-widest text-apice-cream">
+          <span className="inline-block border border-apice-cream/60 bg-apice-ink/40 px-3 py-1 font-sans text-[10px] font-medium uppercase tracking-widest text-apice-cream backdrop-blur-sm">
             {tipoLabel[empreendimento.tipo]}
           </span>
         </div>

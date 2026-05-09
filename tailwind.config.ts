@@ -12,6 +12,7 @@ const config: Config = {
         "apice-ink": "#0E0E0C",
         "apice-bone": "#EDE6D6",
         "apice-champagne": "#C4A572",
+        "apice-champagne-soft": "#E5C68A",
         "apice-bronze": "#8B6F3F",
         "apice-stone": "#3A3833",
         "apice-cream": "#F5F0E3",

@@ -1,41 +1,104 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Container } from "@/components/layout/Container";
-import { EMPREENDIMENTOS, getEmpreendimentoBySlug } from "@/lib/empreendimentos";
+import {
+  EMPREENDIMENTOS,
+  getEmpreendimentoBySlug,
+  getEmpreendimentosRelacionados,
+} from "@/lib/empreendimentos";
+import { APICE_INFO } from "@/lib/constants";
+import { HeroEmpreendimento } from "@/components/empreendimentos/HeroEmpreendimento";
+import { StatusBar } from "@/components/empreendimentos/StatusBar";
+import { FichaTecnica } from "@/components/empreendimentos/FichaTecnica";
+import { Galeria } from "@/components/empreendimentos/Galeria";
+import { PlantasTipologias } from "@/components/empreendimentos/PlantasTipologias";
+import { Localizacao } from "@/components/empreendimentos/Localizacao";
+import { AndamentoObra } from "@/components/empreendimentos/AndamentoObra";
+import { Relacionados } from "@/components/empreendimentos/Relacionados";
+import { CTAInteresse } from "@/components/empreendimentos/CTAInteresse";
+import { EmpreendimentoSchema } from "@/components/seo/EmpreendimentoSchema";
 
 type PageProps = { params: { slug: string } };
 
 export function generateStaticParams() {
-  return EMPREENDIMENTOS.map((empreendimento) => ({ slug: empreendimento.slug }));
+  return EMPREENDIMENTOS.map((empreendimento) => ({
+    slug: empreendimento.slug,
+  }));
 }
 
 export function generateMetadata({ params }: PageProps): Metadata {
   const empreendimento = getEmpreendimentoBySlug(params.slug);
-  if (!empreendimento) return { title: "Empreendimento não encontrado" };
+  if (!empreendimento) {
+    return { title: "Empreendimento não encontrado" };
+  }
+  const baseUrl = APICE_INFO.url.replace(/\/$/, "");
+  const url = `${baseUrl}/empreendimentos/${empreendimento.slug}`;
   return {
-    title: empreendimento.nome,
-    description: empreendimento.descricaoCurta,
+    title: empreendimento.metaTitle,
+    description: empreendimento.metaDescription,
+    alternates: { canonical: url },
+    openGraph: {
+      title: empreendimento.metaTitle,
+      description: empreendimento.metaDescription,
+      url,
+      type: "article",
+      siteName: APICE_INFO.nomeFantasia,
+      locale: "pt_BR",
+      images: [
+        {
+          url: empreendimento.heroImage,
+          width: 1200,
+          height: 630,
+          alt: empreendimento.nome,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: empreendimento.metaTitle,
+      description: empreendimento.metaDescription,
+      images: [empreendimento.heroImage],
+    },
   };
 }
 
-export default function EmpreendimentoDetailPage({ params }: PageProps) {
+export default function EmpreendimentoPage({ params }: PageProps) {
   const empreendimento = getEmpreendimentoBySlug(params.slug);
   if (!empreendimento) notFound();
 
+  const relacionados = getEmpreendimentosRelacionados(params.slug, 3);
+  const empreendimentosOptions = EMPREENDIMENTOS.map((e) => ({
+    slug: e.slug,
+    nome: e.nome,
+  }));
+
   return (
-    <main className="min-h-[calc(100vh-200px)] pb-20 pt-32">
-      <Container>
-        <p className="mb-6 inline-flex items-center gap-3 font-sans text-xs uppercase tracking-widest-3 text-apice-champagne">
-          <span className="block h-px w-10 bg-apice-champagne" aria-hidden />
-          {empreendimento.localizacao}
-        </p>
-        <h1 className="font-display text-5xl font-medium leading-[1.05] tracking-tight md:text-6xl">
-          {empreendimento.nome}
-        </h1>
-        <p className="mt-6 max-w-xl font-sans text-base text-apice-stone md:text-lg">
-          Conteúdo desta página será desenvolvido no Prompt #3.
-        </p>
-      </Container>
+    <main>
+      <EmpreendimentoSchema empreendimento={empreendimento} />
+
+      <HeroEmpreendimento empreendimento={empreendimento} />
+
+      {empreendimento.status === "em-obra" && empreendimento.andamentoObra && (
+        <StatusBar andamentoObra={empreendimento.andamentoObra} />
+      )}
+
+      <FichaTecnica empreendimento={empreendimento} />
+
+      <Galeria empreendimento={empreendimento} />
+
+      <PlantasTipologias empreendimento={empreendimento} />
+
+      <Localizacao empreendimento={empreendimento} />
+
+      {empreendimento.andamentoObra && (
+        <AndamentoObra andamentoObra={empreendimento.andamentoObra} />
+      )}
+
+      <Relacionados empreendimentos={relacionados} />
+
+      <CTAInteresse
+        empreendimento={empreendimento}
+        empreendimentosOptions={empreendimentosOptions}
+      />
     </main>
   );
 }
