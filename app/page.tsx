@@ -1,21 +1,27 @@
-import { Container } from "@/components/layout/Container";
-import { APICE_INFO } from "@/lib/constants";
+import { Hero } from "@/components/home/Hero";
+import { Numeros } from "@/components/home/Numeros";
+import { EmpreendimentosDestaque } from "@/components/home/EmpreendimentosDestaque";
+import { Diferenciais } from "@/components/home/Diferenciais";
+import { ProcessoConstrutivo } from "@/components/home/ProcessoConstrutivo";
+import { Selos } from "@/components/home/Selos";
+import { Depoimentos } from "@/components/home/Depoimentos";
+import { Parceiros } from "@/components/home/Parceiros";
+import { NewsletterImprensa } from "@/components/home/NewsletterImprensa";
+import { CTAFechamento } from "@/components/home/CTAFechamento";
 
 export default function HomePage() {
   return (
-    <main className="min-h-[calc(100vh-200px)] pb-20 pt-32">
-      <Container>
-        <p className="mb-6 inline-flex items-center gap-3 font-sans text-xs uppercase tracking-widest-3 text-apice-champagne">
-          <span className="block h-px w-10 bg-apice-champagne" aria-hidden />
-          Construtora · Brasília
-        </p>
-        <h1 className="font-display text-5xl font-medium leading-[1.05] tracking-tight md:text-6xl lg:text-7xl">
-          {APICE_INFO.tagline}
-        </h1>
-        <p className="mt-6 max-w-xl font-sans text-base text-apice-stone md:text-lg">
-          Home será desenvolvida no Prompt #2.
-        </p>
-      </Container>
+    <main>
+      <Hero />
+      <Numeros />
+      <EmpreendimentosDestaque />
+      <Diferenciais />
+      <ProcessoConstrutivo />
+      <Selos />
+      <Depoimentos />
+      <Parceiros />
+      <NewsletterImprensa />
+      <CTAFechamento />
     </main>
   );
 }

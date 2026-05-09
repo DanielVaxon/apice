@@ -5,7 +5,8 @@
       "Bash(npx --yes create-next-app@14 . --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --use-npm)",
       "Bash(npm install *)",
       "Bash(npm view *)",
-      "Bash(time npm *)"
+      "Bash(time npm *)",
+      "Bash(git add *)"
     ]
   }
 }
